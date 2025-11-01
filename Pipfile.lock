@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "1019143540984208e7b41f6810ad1a4eb0d5f55d5bf2f5cb758abeeeea50772c"
+            "sha256": "99e1c2dd04116ffadb5256259d72354ccf7088eb0539ac135cd6cbd449ae51f7"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -399,6 +399,14 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'",
             "version": "==0.7.1"
+        },
+        "docker": {
+            "hashes": [
+                "sha256:ad8c70e6e3f8926cb8a92619b832b4ea5299e2831c14284663184e200546fa6c",
+                "sha256:c96b93b7f0a746f9e77d325bcfb87422a3d8bd4f03136ae8a85b37f1898d5fc0"
+            ],
+            "index": "pypi",
+            "version": "==7.1.0"
         },
         "executing": {
             "hashes": [
@@ -864,11 +872,11 @@
         },
         "plumbum": {
             "hashes": [
-                "sha256:9fd0d3b0e8d86e4b581af36edf3f3bbe9d1ae15b45b8caab28de1bcb27aaa7f5",
-                "sha256:e640062b72642c3873bd5bdc3effed75ba4d3c70ef6b6a7b907357a84d909219"
+                "sha256:9583d737ac901c474d99d030e4d5eec4c4e6d2d7417b1cf49728cf3be34f6dc8",
+                "sha256:f8cbf0ecec0b73ff4e349398b65112a9e3f9300e7dc019001217dcc148d5c97c"
             ],
-            "markers": "python_version >= '3.8'",
-            "version": "==1.9.0"
+            "markers": "python_version >= '3.9'",
+            "version": "==1.10.0"
         },
         "prometheus-client": {
             "hashes": [
@@ -1447,10 +1455,10 @@
         },
         "webcolors": {
             "hashes": [
-                "sha256:515291393b4cdf0eb19c155749a096f779f7d909f7cceea072791cb9095b92e9",
-                "sha256:ecb3d768f32202af770477b8b65f318fa4f566c22948673a977b00d589dd80f6"
+                "sha256:032c727334856fc0b968f63daa252a1ac93d33db2f5267756623c210e57a4f1d",
+                "sha256:62abae86504f66d0f6364c2a8520de4a0c47b80c03fc3a5f1815fedbef7c19bf"
             ],
-            "version": "==24.11.1"
+            "version": "==25.10.0"
         },
         "webencodings": {
             "hashes": [
