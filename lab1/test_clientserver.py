@@ -26,9 +26,15 @@ class TestEchoService(unittest.TestCase):
         self.client = clientserver.Client()  # create new client for each test
 
     def test_srv_get(self):  # each test_* function is a test
-        """Test simple call"""
-        msg = self.client.call("Hello VS2Lab")
-        self.assertEqual(msg, 'Hello VS2Lab*')
+        """Test phone directory GET request"""
+        msg = self.client.call("GET Hakim")
+        self.assertTrue(msg.startswith("Hakim: "))  # Should return name and number
+
+    def test_srv_getall(self):  # each test_* function is a test
+        """Test phone directory GETALL request"""
+        msg = self.client.call("GETALL")
+        self.assertIn("Hakim: ", msg)  # Should contain phone directory entries
+        self.assertIn("Weber: ", msg)
 
     def tearDown(self):
         self.client.close()  # terminate client after each test

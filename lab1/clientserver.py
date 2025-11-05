@@ -25,6 +25,9 @@ class Server:
         self._logger.info("Server bound to socket " + str(self.sock))
 
         self.telefonbuch = {
+            "Alpha": "0176-12345678",
+            "Beta": "0176-23456789", 
+            "Gamma": "0176-123123123",
             "Hakim": 13245,
             "Florian": 13245,
             "Yusuf": 13245, 
@@ -120,7 +123,7 @@ class Client:
         self.sock.connect((const_cs.HOST, const_cs.PORT))
         self.logger.info("Client connected to socket " + str(self.sock))
 
-    def send_request(self, request):
+    def call(self, request):
         """ Call server """
         self.sock.send(request.encode('ascii'))  # send encoded string as data
         data = self.sock.recv(1024)  # receive the response
@@ -130,11 +133,11 @@ class Client:
         return response
 
     def GET(self, name):
-        response = self.send_request(f"GET {name}")
+        response = self.call(f"GET {name}")
         print(response)
     
     def GETALL(self):
-        response = self.send_request("GETALL")
+        response = self.call("GETALL")
         print(response)
 
     def close(self):
