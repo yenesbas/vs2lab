@@ -6,9 +6,9 @@ import logging
 import socket
 
 import const_cs
-from context import lab_logging
+#from context import lab_logging
 
-lab_logging.setup(stream_level=logging.INFO)  # init loging channels for the lab
+#lab_logging.setup(stream_level=logging.INFO)  # init loging channels for the lab
 
 #pylint: disable=logging-not-lazy, line-too-long
 
