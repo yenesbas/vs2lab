@@ -35,6 +35,11 @@ class TestEchoService(unittest.TestCase):
         msg = self.client.call("GETALL")
         self.assertIn("Hakim: ", msg)  # Should contain phone directory entries
         self.assertIn("Weber: ", msg)
+        
+    def test_srv_getnotfound(self):
+        """Test with unknown name"""
+        msg = self.client.GET("Schmidt")
+        self.assertEqual(msg, "Schmidt not found\n")
 
     def tearDown(self):
         self.client.close()  # terminate client after each test
