@@ -431,15 +431,16 @@ pipenv run python async_zip.py
    - Client starten
    - Ablauf erklären
 
+
 ### Checkliste vor Abgabe
 
-- [ ] Server sendet ACK sofort nach Request-Empfang
-- [ ] Server wartet 10 Sekunden vor Berechnung
-- [ ] Client verwendet Thread für Ergebnis-Empfang
-- [ ] Callback-Funktion wird korrekt aufgerufen
-- [ ] Client zeigt Aktivität während des Wartens
-- [ ] Ergebnis wird am Ende ausgegeben
-- [ ] Code ist kommentiert und verständlich
+- [x] Server sendet ACK sofort nach Request-Empfang
+- [x] Server wartet 10 Sekunden vor Berechnung
+- [x] Client verwendet Thread für Ergebnis-Empfang
+- [x] Callback-Funktion wird korrekt aufgerufen
+- [x] Client zeigt Aktivität während des Wartens
+- [x] Ergebnis wird am Ende ausgegeben
+- [x] Code ist kommentiert und verständlich
 - [ ] Alles wurde getestet
 
 ---

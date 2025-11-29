@@ -1,4 +1,6 @@
 import constRPC
+import time
+import threading
 
 from context import lab_channel
 
@@ -25,12 +27,28 @@ class Client:
     def stop(self):
         self.chan.leave('client')
 
-    def append(self, data, db_list):
+    def append(self, data, db_list, callback):
         assert isinstance(db_list, DBList)
         msglst = (constRPC.APPEND, data, db_list)  # message payload
         self.chan.send_to(self.server, msglst)  # send msg to server
-        msgrcv = self.chan.receive_from(self.server)  # wait for response
-        return msgrcv[1]  # pass it to caller
+        
+        # wait for ACK response
+        msgrcv = self.chan.receive_from(self.server)
+        
+        if not constRPC.OK == msgrcv[1][0]:
+            print("No ACK received")
+            return None
+        
+        # Define thread function for waiting on result
+        def wait_for_response():
+            result_msg = self.chan.receive_from(self.server)  # wait for response
+            callback(result_msg[1])  # pass it to callback
+        
+        # Start thread to wait for final answer
+        waitThread = threading.Thread(target=wait_for_response)
+        waitThread.start()
+        
+        return waitThread
 
 
 class Server:
@@ -52,7 +70,16 @@ class Server:
                 client = msgreq[0]  # see who is the caller
                 msgrpc = msgreq[1]  # fetch call & parameters
                 if constRPC.APPEND == msgrpc[0]:  # check what is being requested
+                    # Send ACK immediately to acknowledge request receipt
+                    self.chan.send_to({client}, (constRPC.OK,))
+                    
+                    # Simulate long-running computation (10 seconds)
+                    time.sleep(10)
+                    
+                    # Perform the actual operation
                     result = self.append(msgrpc[1], msgrpc[2])  # do local call
-                    self.chan.send_to({client}, result)  # return response
+                    
+                    # Send the final result
+                    self.chan.send_to({client}, (constRPC.APPEND, result))  # return response
                 else:
                     pass  # unsupported request, simply ignore
