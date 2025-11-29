@@ -109,29 +109,6 @@ Experiment nachverfolgen:
 **Aufgabe Lab3.1:** Erklären Sie das Verhalten der Systeme in den beiden
 Experimenten.
 
-### 2.2. Publish-Subscribe
-
-Mit dem Publish-Subscribe Muster lässt sich *1-n Kommunikation* (ein Sender, n
-Empfänger) realisieren. Zudem können Nachrichten nach Themen gefiltert werden.
-
-Wechseln Sie zunächst in das entsprechende Verzeichnis:
-
-```bash
-cd ~/git/vs2lab/lab3/zmq2 # angenommen hier liegt das vs2lab Repo
-```
-
-#### Experiment1
-
-1. Terminal1: `pipenv run python server.py`
-2. Terminal2: `pipenv run python client.py`
-3. Terminal3: `pipenv run python client.py`
-
-#### Experiment 2
-
-1. Terminal1: `pipenv run python server.py`
-2. Terminal2: `pipenv run python client.py`
-3. Terminal3: `pipenv run python client1.py`
-
 **Antwort Lab3.1:**
 
 **Experiment 1: Client startet vor Server**
@@ -165,8 +142,63 @@ Der Server verarbeitet die eingehenden Requests in einer fairen Reihenfolge
 Jeder Request bekommt genau eine Reply, und die Kopplung zwischen REQ- und REP-Socket
 stellt sicher, dass die Antwort zum richtigen Client zurückgeht.
 
+### 2.2. Publish-Subscribe
+
+Mit dem Publish-Subscribe Muster lässt sich *1-n Kommunikation* (ein Sender, n
+Empfänger) realisieren. Zudem können Nachrichten nach Themen gefiltert werden.
+
+Wechseln Sie zunächst in das entsprechende Verzeichnis:
+
+```bash
+cd ~/git/vs2lab/lab3/zmq2 # angenommen hier liegt das vs2lab Repo
+```
+
+#### Experiment1
+
+1. Terminal1: `pipenv run python server.py`
+2. Terminal2: `pipenv run python client.py`
+3. Terminal3: `pipenv run python client.py`
+
+#### Experiment 2
+
+1. Terminal1: `pipenv run python server.py`
+2. Terminal2: `pipenv run python client.py`
+3. Terminal3: `pipenv run python client1.py`
+
 **Aufgabe Lab3.2:** Erklären Sie das Verhalten der Systeme in den beiden
 Experimenten.
+
+**Antwort Lab3.2:**
+
+**Experiment 1: Zwei identische Subscriber (beide subscriben TIME)**
+
+Beobachtung:
+- Der Server sendet alle 5 Sekunden zwei Nachrichten: TIME und DATE
+- Beide Clients empfangen exakt die gleichen TIME-Nachrichten mit identischen Zeitstempeln
+- Jeder Client erhält 5 TIME-Nachrichten
+
+Erklärung:
+Im Publish-Subscribe-Muster sendet ein **Publisher (PUB-Socket)** Nachrichten an alle 
+verbundenen **Subscriber (SUB-Sockets)**. Dies ist **Broadcasting** - jede Nachricht 
+wird an alle Subscriber kopiert, die das entsprechende Topic abonniert haben. Beide 
+Clients subscriben "TIME" (`setsockopt(zmq.SUBSCRIBE, b"TIME")`), daher empfangen 
+beide alle TIME-Nachrichten. Die DATE-Nachrichten werden ignoriert, da sie nicht 
+abonniert sind.
+
+**Experiment 2: Zwei Subscriber mit unterschiedlichen Topics**
+
+Beobachtung:
+- `client.py` subscribt "TIME" und empfängt nur TIME-Nachrichten
+- `client1.py` subscribt "DATE" und empfängt nur DATE-Nachrichten
+- Beide empfangen ihre Nachrichten gleichzeitig, aber gefiltert nach Topic
+- `client1.py` beendet sich schneller (nur 3 Iterationen statt 5)
+
+Erklärung:
+ZeroMQ ermöglicht **Topic-basierte Filterung**. Der Publisher sendet beide Nachrichtentypen
+(TIME und DATE), aber jeder Subscriber empfängt nur die Nachrichten, die mit seinem 
+abonnierten Prefix übereinstimmen. Dies zeigt die Stärke des Pub-Sub-Musters: 
+**selektives Empfangen** von Nachrichten ohne dass der Publisher wissen muss, 
+wer was empfängt. Die Filterung erfolgt effizient auf Subscriber-Seite.
 
 ### 2.3. Parallel Pipeline
 
