@@ -239,6 +239,39 @@ Gehen sie nun wie folgt vor:
 **Aufgabe Lab3.3:** Erklären Sie das Verhalten der Systeme in den beiden
 Experimenten.
 
+**Antwort Lab3.3:**
+
+**Experiment 1: Farmer zuerst, dann Worker**
+
+Beobachtung:
+- Beide Farmer (1 und 2) senden je 100 Tasks
+- Ein einzelner Worker empfängt alle 200 Tasks
+- Die Tasks kommen abwechselnd von Farmer 1 und Farmer 2 (round-robin)
+- Beispiel: "from 1", "from 2", "from 1", "from 2", ...
+
+Erklärung:
+Im **Parallel Pipeline-Muster** verwenden Farmer **PUSH-Sockets** (senden) und Worker 
+**PULL-Sockets** (empfangen). Der Worker verbindet sich mit beiden Farmern 
+(`pull_socket.connect(address1)` und `pull_socket.connect(address2)`). ZeroMQ verteilt 
+eingehende Nachrichten von mehreren Sendern fair auf die Pull-Sockets (**fair queuing**).
+Da nur ein Worker aktiv ist, empfängt er alle Tasks von beiden Farmern in gleichmäßiger
+Verteilung.
+
+**Experiment 2: Worker zuerst, dann nur ein Farmer**
+
+Beobachtung:
+- Nur Farmer 1 sendet 100 Tasks
+- Zwei Worker empfangen die Tasks
+- Jeder Worker bekommt ca. 50 Tasks (gleichmäßige Verteilung)
+- Alle Tasks kommen nur "from 1"
+
+Erklärung:
+Der PUSH-Socket des Farmers verteilt seine Nachrichten gleichmäßig an alle verbundenen
+PULL-Sockets (**load balancing / round-robin**). Farmer 1 sendet abwechselnd an 
+Worker 1 und Worker 2. Dies zeigt die Stärke des Pipeline-Musters: **automatische 
+Lastverteilung** für parallele Verarbeitung. Die Worker müssen nicht wissen, wie viele
+Farmer existieren, und die Farmer müssen nicht wissen, wie viele Worker verfügbar sind.
+
 ## 3 Aufgabe
 
 In der Programmieraufgabe soll das Parallel Pipeline Muster verwendet werden, um
