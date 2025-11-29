@@ -132,6 +132,39 @@ cd ~/git/vs2lab/lab3/zmq2 # angenommen hier liegt das vs2lab Repo
 2. Terminal2: `pipenv run python client.py`
 3. Terminal3: `pipenv run python client1.py`
 
+**Antwort Lab3.1:**
+
+**Experiment 1: Client startet vor Server**
+
+Beobachtung:
+- Der Client sendet seine erste Request und wartet (blockiert bei `recv()`)
+- Wenn der Server danach gestartet wird, empfängt er alle gepufferten Nachrichten
+- Der Client erhält dann seine Responses und kann normal weiterarbeiten
+
+Erklärung:
+ZeroMQ arbeitet **asynchron** mit internem Message-Buffering. Wenn der Client eine 
+Nachricht sendet bevor der Server läuft, wird die Nachricht nicht verloren, sondern 
+in einem internen Puffer zwischengespeichert. Sobald der Server startet und den 
+Socket bindet, werden die gepufferten Nachrichten zugestellt. Der Client blockiert 
+bei `recv()` bis eine Antwort vom Server kommt. Dies zeigt die **Entkopplung** von 
+Sender und Empfänger - sie müssen nicht gleichzeitig aktiv sein.
+
+**Experiment 2: Zwei Clients auf einen Server**
+
+Beobachtung:
+- `client.py` verbindet sich mit PORT1 und sendet "Hello world"
+- `client1.py` verbindet sich mit PORT2 und sendet "Hello vs2lab"
+- Der Server bindet beide Ports (PORT1 und PORT2) und empfängt Nachrichten von beiden
+- Die Nachrichten werden abwechselnd verarbeitet (fair queuing)
+
+Erklärung:
+Ein einzelner ZeroMQ REP-Socket kann an **mehrere Adressen binden** (hier PORT1 und 
+PORT2). Jeder REQ-Socket (Client) wird mit genau einem REP-Socket (Server) gekoppelt.
+Der Server verarbeitet die eingehenden Requests in einer fairen Reihenfolge 
+(**round-robin**). Dies demonstriert das Request-Reply-Muster mit mehreren Clients:
+Jeder Request bekommt genau eine Reply, und die Kopplung zwischen REQ- und REP-Socket
+stellt sicher, dass die Antwort zum richtigen Client zurückgeht.
+
 **Aufgabe Lab3.2:** Erklären Sie das Verhalten der Systeme in den beiden
 Experimenten.
 
