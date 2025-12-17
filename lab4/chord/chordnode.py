@@ -147,14 +147,21 @@ class ChordNode:
                 break
 
             if request[0] == constChord.LOOKUP_REQ:  # A lookup request
-                # Extract key and original sender (for recursive lookup)
+                # Extract key from request
                 key = int(request[1])
-                original_sender = sender if len(request) == 2 else request[2]
+                
+                # Determine the original sender (client who started the lookup)
+                # If request has 2 elements: this is the first request from client
+                # If request has 3 elements: this is a forwarded request, original sender is in request[2]
+                if len(request) == 2:
+                    original_sender = sender
+                else:
+                    original_sender = request[2]
                 
                 self.logger.info("Node {:04n} received LOOKUP {:04n} from {:04n}."
                                  .format(self.node_id, key, int(sender)))
 
-                # Look up local successor for the key
+                # Zuständigen Knoten für den Schlüssel lokal bestimmen
                 next_id: int = self.local_successor_node(key)
                 
                 # Check if this node is the responsible node
@@ -164,12 +171,12 @@ class ChordNode:
                                      .format(self.node_id, key, int(original_sender)))
                     self.channel.send_to([original_sender], (constChord.LOOKUP_REP, next_id))
                 else:
-                    # Recursive lookup: forward request to next node with original sender
+                    # Recursive Aufruf an den nächsten Knoten
                     self.logger.info("Node {:04n} forwarding LOOKUP {:04n} to {:04n}."
                                      .format(self.node_id, key, next_id))
                     self.channel.send_to([str(next_id)], (constChord.LOOKUP_REQ, key, original_sender))
 
-                # Finally do a sanity check
+                # Finally do a sanity check..
                 if not self.channel.exists(next_id):  # probe for existence
                     self.delete_node(next_id)  # purge disappeared node
 
