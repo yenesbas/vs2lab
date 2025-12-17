@@ -64,12 +64,12 @@ def main():
             break
     
     # Print final summary
-    print(f"\n{'='*50}")
+    print(f"\n{'='*30}")
     print(f"Reducer {reducer_id} - Final Word Count:")
-    print(f"{'='*50}")
+    print(f"{'='*30}")
     for word, count in sorted(word_count.items()):
         print(f"{word}: {count}")
-    print(f"{'='*50}")
+    print(f"{'='*30}")
     print(f"Total unique words: {len(word_count)}")
     print(f"Total words processed: {sum(word_count.values())}")
 
