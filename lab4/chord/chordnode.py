@@ -150,9 +150,6 @@ class ChordNode:
                 # Extract key from request
                 key = int(request[1])
                 
-                # Determine the original sender (client who started the lookup)
-                # If request has 2 elements: this is the first request from client
-                # If request has 3 elements: this is a forwarded request, original sender is in request[2]
                 if len(request) == 2:
                     original_sender = sender
                 else:
