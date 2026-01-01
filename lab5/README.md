@@ -16,6 +16,27 @@ erstellen. Dabei sind die Ziele wie folgt:
 - Wechselseitigen Ausschluss anhand eines voll verteilten Ansatzes verstehen
 - Mit Absturz-Ausfällen in partiell synchronen Systemen umgehen
 
+## Was ist Mutex (Mutual Exclusion)?
+
+**Mutex** (Mutual Exclusion = wechselseitiger Ausschluss) ist ein fundamentales Konzept in verteilten Systemen, das sicherstellt, dass zu einem bestimmten Zeitpunkt nur ein Prozess auf eine gemeinsame Ressource (kritische Sektion) zugreifen kann.
+
+### Warum ist Mutex wichtig?
+
+In verteilten Systemen können mehrere Prozesse gleichzeitig auf gemeinsame Ressourcen zugreifen wollen, z.B.:
+- Schreibzugriff auf eine Datei
+- Aktualisierung einer Datenbank
+- Verwendung eines Druckers
+
+Ohne Koordinierung können **Race Conditions** entstehen, die zu inkonsistenten Zuständen führen. Mutex verhindert dies durch geordneten Zugriff.
+
+### Anforderungen an einen Mutex-Algorithmus:
+
+1. **Safety (Sicherheit)**: Maximal ein Prozess darf sich gleichzeitig in der kritischen Sektion befinden
+2. **Liveness (Lebendigkeit)**: Jeder Prozess, der Zugriff anfordert, erhält ihn irgendwann
+3. **Fairness**: Anfragen werden in einer fairen Reihenfolge bearbeitet (z.B. FIFO)
+
+In diesem Labor verwenden wir **Lamport's logische Uhren**, um eine eindeutige, konsistente Reihenfolge der Zugriffe ohne zentrale Koordination zu erreichen.
+
 ## 1. Vorbereitung
 
 ### 1.1. Software installieren
