@@ -2,11 +2,7 @@
 ENTER = 'ENTER'
 ALLOW = 'ALLOW'
 RELEASE = 'RELEASE'
-<<<<<<< HEAD
-ALIVE = 'ALIVE'
-=======
 CRASHED = 'CRASHED'
->>>>>>> da903ba0ab55d7340c89846ad1d7f89a748aed95
 # Process behaviors
 ACTIVE = 'ACTIVE'
 PASSIVE = 'PASSIVE'
